@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation, useNavigate} from 'react-router'
+import { useLocation, useNavigate} from 'react-router-dom'
 
 
 const Header = () => {
@@ -19,9 +19,9 @@ const Header = () => {
             </div>
             <div>
                 <ul className='flex space-x-10 '>
-                    <li className={`py-3 font-semibold text-sm border-b-[3px] border-b-transparent cursor-pointer text-gray-400 ${pathMatchRoute("/") && "text-gray-900  border-b-red-500"}`} onClick={()=>navigate("/")} >Home</li>
-                    <li  className={`py-3 font-semibold text-sm border-b-[3px] border-b-transparent cursor-pointer text-gray-400 ${pathMatchRoute("/offers") && "text-gray-900  border-b-red-500"}`} onClick={()=>navigate("/offers")} >Offer</li>
-                    <li  className={`py-3 font-semibold text-sm border-b-[3px] border-b-transparent cursor-pointer text-gray-400 ${pathMatchRoute("/sign-in") && "text-gray-900 border-b-red-500"}`} onClick={()=>navigate("/sign-in")} >Sign in</li>
+                    <li className={`py-3 font-semibold text-sm border-b-[3px] border-b-transparent cursor-pointer text-gray-400 ${pathMatchRoute("/") && "text-gray-800  border-b-red-600"}`} onClick={()=>navigate("/")} >Home</li>
+                    <li  className={`py-3 font-semibold text-sm border-b-[3px] border-b-transparent cursor-pointer text-gray-400 ${pathMatchRoute("/offers") && "text-gray-800  border-b-red-600"}`} onClick={()=>navigate("/offers")} >Offer</li>
+                    <li  className={`py-3 font-semibold text-sm border-b-[3px] border-b-transparent cursor-pointer text-gray-400 ${pathMatchRoute("/sign-in") && "text-gray-800 border-b-red-600"}`} onClick={()=>navigate("/sign-in")} >Sign in</li>
                 </ul>
             </div>
         </header>
