@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
 const Profile = () => {
+  const auth = getAuth()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    name: "solomon",
-    email: "solomon@gmail.com",
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
   });
   const { name, email } = formData;
 
   function onLogout(){
-    const auth = getAuth()
     auth.signOut()
     navigate("/")
   }
