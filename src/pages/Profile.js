@@ -1,8 +1,12 @@
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { db } from "../firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
 const Profile = () => {
+  const [changeDetail, setChangeDetail] = useState(false)
   const auth = getAuth()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
@@ -15,6 +19,28 @@ const Profile = () => {
     auth.signOut()
     navigate("/")
   }
+  function onChange(e){
+    setFormData((prevState)=>({
+      ...prevState,
+      [e.target.id]:e.target.value
+    }))
+  }
+  async function onSubmit(){
+      try {
+        if(auth.currentUser.displayName !== name){
+          await updateProfile(auth.currentUser, {
+            displayName:name
+          });
+          const docRef = doc(db, 'users', auth.currentUser.uid)
+          await updateDoc(docRef, {
+            name,
+          })
+        }
+        toast.success("Profile detail was success")
+      } catch (error) {
+        toast.error("Could not update the profile details")
+      }
+  }
   return (
     <>
       <section className="max-w-6xl mx-auto flex justify-center items-center flex-col">
@@ -26,8 +52,9 @@ const Profile = () => {
               type="text"
               id="name"
               value={name}
-              disabled
-              className="mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out"
+              disabled ={!changeDetail}
+              onChange={onChange}
+              className={`mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out ${changeDetail && "bg-red-200 focus:bg-red-200"}`}
             />
 
             <input
@@ -39,7 +66,11 @@ const Profile = () => {
             />
             <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg mb-6">
               <p className="flex items-center">Do you want to change your name?
-              <span className="text-red-600 hover:text-red-700 transition duration-200 ease-in-out cursor-pointer ml-1 ">Edit</span>
+              <span onClick={()=>{changeDetail && onSubmit();
+                  setChangeDetail((prevState)=>!prevState)
+              } } className="text-red-600 hover:text-red-700 transition duration-200 ease-in-out cursor-pointer ml-1 ">
+                {changeDetail ? "Apply change" : "Edit"}
+              </span>
               </p>
               <p onClick={onLogout} className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out cursor-pointer">Sign out</p>
             </div>
